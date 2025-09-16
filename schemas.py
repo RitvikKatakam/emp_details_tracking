@@ -2,38 +2,25 @@ from pydantic import BaseModel, Field
 from typing import List, Optional
 from datetime import date
 
+
 class EmployeeBase(BaseModel):
-    employee_id: str = Field(..., description="Unique employee identifier")
-    name: str = Field(..., min_length=1, description="Employee name")
-    department: str = Field(..., min_length=1, description="Department name")
-    salary: float = Field(..., gt=0, description="Employee salary")
-    joining_date: str = Field(..., description="Joining date (YYYY-MM-DD format)")
-    skills: List[str] = Field(..., min_items=1, description="List of skills")
+    employee_id: str = Field(..., example="EMP123")
+    name: str = Field(..., example="John Doe")
+    department: str = Field(..., example="Engineering")
+    salary: float = Field(..., example=5000.00)
+    joining_date: date = Field(..., example="2023-01-15")
+    skills: List[str] = Field(default_factory=list, example=["Python", "Django"])
 
     class Config:
-        json_schema_extra = {
-            "example": {
-                "employee_id": "E123",
-                "name": "John Doe",
-                "department": "Engineering",
-                "salary": 75000,
-                "joining_date": "2023-01-15",
-                "skills": ["Python", "MongoDB", "APIs"]
-            }
-        }
+        orm_mode = True
+
 
 class EmployeeUpdate(BaseModel):
-    name: Optional[str] = Field(None, min_length=1)
-    department: Optional[str] = Field(None, min_length=1)
-    salary: Optional[float] = Field(None, gt=0)
-    joining_date: Optional[str] = None
-    skills: Optional[List[str]] = Field(None, min_items=1)
+    name: Optional[str] = Field(None, example="Jane Smith")
+    department: Optional[str] = Field(None, example="HR")
+    salary: Optional[float] = Field(None, example=6000.00)
+    joining_date: Optional[date] = Field(None, example="2023-05-10")
+    skills: Optional[List[str]] = Field(None, example=["Excel", "Recruitment"])
 
     class Config:
-        json_schema_extra = {
-            "example": {
-                "name": "Jane Smith",
-                "salary": 80000,
-                "skills": ["Python", "FastAPI", "Docker"]
-            }
-        }
+        orm_mode = True
